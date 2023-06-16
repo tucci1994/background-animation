@@ -193,7 +193,8 @@ function sendMessage() {
 
     // Effettua la chiamata POST
     const url =
-      "layer02.costituzionesrl.com/conversations/edca8d4c-dcac-40a5-b08b-639bfc301178/ask";
+      "https://layer02.costituzionesrl.com/conversations/edca8d4c-dcac-40a5-b08b-639bfc301178/ask";
+
     const data = {
       history_enabled: false,
       query: message,
