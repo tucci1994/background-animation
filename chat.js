@@ -191,7 +191,6 @@ function sendMessage() {
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Effettua la chiamata POST
     const url =
       "https://layer02.costituzionesrl.com/conversations/edca8d4c-dcac-40a5-b08b-639bfc301178/ask";
 
@@ -202,14 +201,13 @@ function sendMessage() {
 
     fetch(url, {
       method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      body: data,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((responseData) => {
-        // Gestisci la risposta qui
         console.log("Risposta:", responseData);
       })
       .catch((error) => {
