@@ -202,10 +202,10 @@ function sendMessage() {
 
     fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      body: data,
     })
       .then((response) => response.json())
       .then((responseData) => {
