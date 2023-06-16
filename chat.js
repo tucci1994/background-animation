@@ -30,6 +30,8 @@ const styles = `
     border-radius: 10px;
     background-color: #fff;
     border: 1px solid #ced4da;
+    display: none; /* Aggiunta: nascondi la chat all'avvio */
+    overflow-y: auto; /* Aggiunta: abilita lo scroll se ci sono molti messaggi */
   }
 
   .chat-header {
@@ -51,7 +53,7 @@ const styles = `
     margin-right: 10px;
   }
 
-    .chat-input {
+  .chat-input {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -60,7 +62,7 @@ const styles = `
     align-items: flex-end;
     background-color: #f5f5f5;
     border-top: 1px solid #ced4da;
-    }
+  }
 
   .chat-input textarea {
     flex-grow: 1;
@@ -90,9 +92,15 @@ const styles = `
   .align-bottom {
     align-self: flex-end;
   }
+
+  .message {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 10px;
+  }
 `;
 
-// Creazione degli elementi della chat
 function createChat() {
   const chatContainer = document.createElement("div");
   chatContainer.className = "chat-container";
@@ -146,7 +154,6 @@ function createChat() {
   document.body.appendChild(chatContainer);
 }
 
-// Gestione dell'apertura/chiusura della chat
 let isChatOpen = false;
 
 function toggleChat() {
@@ -168,14 +175,51 @@ function updateChat() {
 }
 
 function sendMessage() {
-  console.log("ciao");
-  // Aggiungi qui la logica per gestire l'invio del messaggio
+  const inputField = document.querySelector(".chat-input textarea");
+  const message = inputField.value.trim();
+
+  if (message !== "") {
+    console.log("Messaggio inviato:", message);
+    inputField.value = "";
+
+    const messageBox = document.createElement("div");
+    messageBox.className = "message";
+    messageBox.textContent = message;
+
+    const chatBox = document.querySelector(".chat-box");
+    chatBox.appendChild(messageBox);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Effettua la chiamata POST
+    const url =
+      "/layer02.costituzionesrl.com/conversations/edca8d4c-dcac-40a5-b08b-639bfc301178/ask";
+    const data = {
+      history_enabled: false,
+      query: message,
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        // Gestisci la risposta qui
+        console.log("Risposta:", responseData);
+      })
+      .catch((error) => {
+        console.error("Errore nella richiesta:", error);
+      });
+  }
 }
 
-// Aggiunta degli stili CSS al documento
-const styleElement = document.createElement("style");
-styleElement.innerHTML = styles;
-document.head.appendChild(styleElement);
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
 
-// Inizializzazione della chat
 createChat();
